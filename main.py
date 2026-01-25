@@ -13,6 +13,36 @@ from keyboards import main_menu, chaos, appoitments, important, format, contacts
 from states import Leadform
 from db import create_tables, save_form
 
+#  Маппинг callback_data → человекочитаемый текст для уведомлений
+CALLBACK_MAP = {
+    # chaos()
+    "problem_dm": "Заявки в личке / мессенджерах",
+    "deploy_clients": "Долго отвечаем клиентам", 
+    "no_appoitments": "Теряются заявки",
+    "problem_schedule": "Запись / расписание / напоминания",
+    "no_clients": "Нет учёта клиентов",
+    "or_something": "Другое",
+    
+    # appoitments()
+    "10": "0-10 заявок",
+    "30": "10-30 заявок",
+    "100": "30-100 заявок", 
+    "more": "100+ заявок",
+    
+    # important()
+    "economy": "Экономия времени владельца",
+    "more_orders": "Увеличение продаж",
+    "control": "Навести порядок и контроль",
+    "proccessing": "Ускорить обработку клиентов",
+    "load": "Снизить нагрузку на сотрудников",
+    
+    # format()
+    "fast_close": "Быстро закрыть одну задачу",
+    "system": "Система под ключ",
+    "max": "Максимально автоматизировать бизнес",
+    "consultation": "Нужна консультация"
+}
+
 # Логирование действий и создание конфинга для записей логов
 logging.basicConfig(
     level=logging.INFO,
@@ -156,14 +186,15 @@ async def finish_contact(message: Message, state: FSMContext):
     data = await state.get_data()
     save_form(data, message.from_user.id)
 
+    
     text = f"""
 Новая заявка 🔥
 
 Ниша: {data['sphere']}
-Боль: {data['problem']}
-Поток: {data['volume']}
-Цель: {data['priority']}
-Формат: {data['format']}
+Боль: {CALLBACK_MAP.get(data['problem'], data['problem'])}
+Поток: {CALLBACK_MAP.get(data['volume'], data['volume'])}
+Цель: {CALLBACK_MAP.get(data['priority'], data['priority'])}
+Формат: {CALLBACK_MAP.get(data['format'], data['format'])}
 Телефон: {data['contact']}
 TG: @{message.from_user.username or '-'}
     """
@@ -189,14 +220,15 @@ async def finish_text(message: Message, state: FSMContext):
     data = await state.get_data()
     save_form(data, message.from_user.id)
 
+    
     text = f"""
 Новая заявка 🔥
 
 Ниша: {data['sphere']}
-Боль: {data['problem']}
-Поток: {data['volume']}
-Цель: {data['priority']}
-Формат: {data['format']}
+Боль: {CALLBACK_MAP.get(data['problem'], data['problem'])}
+Поток: {CALLBACK_MAP.get(data['volume'], data['volume'])}
+Цель: {CALLBACK_MAP.get(data['priority'], data['priority'])}
+Формат: {CALLBACK_MAP.get(data['format'], data['format'])}
 Телефон: {data['contact']}
 TG: @{message.from_user.username or '-'}
     """
