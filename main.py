@@ -72,7 +72,7 @@ class CallbackLoggingMiddleware(BaseMiddleware):
 
 # ENV
 load_dotenv()
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN = str(os.getenv("BOT_TOKEN"))
 ADMIN_IDS = os.getenv("ADMIN_IDS")
 
 # Bot
